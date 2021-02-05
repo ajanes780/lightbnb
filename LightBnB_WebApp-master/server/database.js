@@ -127,6 +127,7 @@ const getAllProperties = function (options, limit = 10) {
   if (options.minimum_price_per_night && options.maximum_price_per_night) {
     queryParams.push(options.minimum_price_per_night * 100);
     queryParams.push(options.maximum_price_per_night * 100);
+    //check to see if its the only parms sent
     if (queryParams.length === 2) {
       queryString += `WHERE cost_per_night >= $${
         queryParams.length - 1
@@ -183,14 +184,16 @@ const addProperty = function (property) {
     property.post_code,
   ];
   const queryString = `
-  INSERT INTO properties(owner_id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, country, street, city, province, post_code)
+  INSERT INTO properties(owner_id, title, description, thumbnail_photo_url,
+  cover_photo_url, cost_per_night, parking_spaces, number_of_bathrooms,
+  number_of_bedrooms, country, street, city, province, post_code)
   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
   RETURNING *;
   `;
   return pool
     .query(queryString, values)
     .then((res) => {
-      console.log("it worked");
+      console.log("Bro You Did It ");
       return res.rows[0];
     })
     .catch((err) => console.error("query error", err.stack));
